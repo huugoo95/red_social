@@ -1,0 +1,23 @@
+  body{
+    background: url("../img/fondo.jpg") fixed;
+    color: white;
+  }
+
+
+.hijo-centrado {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    width: 50%;
+}
+
+ #myModal{
+    color: black;
+
+  }
+  .panel-primary{
+    border-radius:20px;
+
+  }
+  
