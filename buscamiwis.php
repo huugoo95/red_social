@@ -22,7 +22,7 @@
 		    echo "<a href='user.php?usu=".$row['ID']."' <h2 class='panel-title'>".$row['Nombre']."</h2></a>";
 		  echo "</div>";
 		  echo "<div class='panel panel-body' style='color:black';>";
-    		echo "<IMG  style='border-radius:20px' SRC='img/".$row['ID']."/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
+    		echo "<IMG  style='border-radius:20px' SRC='assets/img/".$row['ID']."/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
 		     echo $row['Descripcion'];
 		  echo "</div>";
 		   echo "<div class='panel panel-footer' style='color:black';>";

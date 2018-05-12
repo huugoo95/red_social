@@ -28,7 +28,7 @@
   </div>
   
 <?php 
-echo "holas";
+
 /*Incluimos fichero de conexión sql*/
 	include_once("sql.php");
 
@@ -48,14 +48,14 @@ echo "holas";
 			   $asignacion = "\$" . $nombre_campo . "='" . $valor . "';";
 			   eval($asignacion);
 			}
-			
+
 			$gbd->exec("SET CHARACTER SET utf8");
 			$gbd->exec("INSERT INTO Usuarios (Nombre,Apellidos,Pais,Email,Password) VALUES('$Nombre','$Apellidos','$Pais','$Email','$password') ");
 			//echo "INSERT INTO Usuarios (Nombre,Apellidos,Pais,Email,Password) VALUES('$Nombre','$Apellidos','$Pais','$Email','$Password') ";
 			session_start();
  			$_SESSION["Nombre"]="$Nombre";
 		}
-	
+
 /*Comprobamos si tenemos qe validar un logueo*/
 
 		if (isset($_POST["logueo"])) {
@@ -90,8 +90,7 @@ echo "holas";
  include_once("navbar.php"); 
 
 if (!isset($_SESSION["ID"])) {
-	header('Location: http://www.phpproject.com/');
-	
+	header('Location: /');
 }
 
 /*Comprobamos si accedemos al perfil propio o a otro perfil*/
@@ -115,7 +114,7 @@ echo "<div class='container'>";
 
 	echo "<div class='row'>";
 		echo "<div class='col-md-4' id='cabeceraUser'>";
-		echo "<IMG  style='border-radius:20px' SRC='img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
+		echo "<IMG  style='border-radius:20px' SRC='assets/img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
 		echo "</div>";
 
 		echo "<div class='col-md-6'>";
