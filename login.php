@@ -1,7 +1,7 @@
 <form class="form-horizontal" action="user.php" method="post">
 
 <!-- Form Name -->
-<legend>Accede a tu red</legend>
+<h2>Accede a tu red</h2>
 
 <!-- Text input-->
 <div class="form-group">

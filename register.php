@@ -3,7 +3,7 @@
 <form class="form-horizontal" action="user.php" method="post">
 
 <!-- Form Name -->
-<legend>Formulario de registro</legend>
+<h2>Formulario de registro</h2>
 
 <!-- Text input-->
 <div class="form-group">

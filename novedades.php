@@ -9,7 +9,7 @@ include_once("sql.php");
  include_once("navbar.php"); 
 
 if (!isset($_SESSION["ID"])) {
-	header('Location: http://www.phpproject.com/');
+	header('Location: /');
 	
 }
 
@@ -31,17 +31,17 @@ while($row = array_shift($arrayConsultarPublis)) {
 
 	//echo $arrayConsultarUsuario[0];
 
-	echo "<div class='panel panel-primary'>";
+	echo "<div class='panel panel-default'>";
 	  echo "<div class='panel panel-heading'>";
 		    echo "<a href='user.php?usu=".$arrayConsultarUsuario[0]["ID"]."' <h2 class='panel-title'>".$arrayConsultarUsuario[0]["Nombre"]."</h2></a>";
 
 	  echo "</div>";
 	  echo "<div class='panel panel-body' style='color:black';>";
-	    echo "<IMG  style='border-radius:20px ;float:left' SRC='img/".$_SESSION['ID']."/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
+	    echo "<IMG SRC='img/".$_SESSION['ID']."/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
 	   	echo "<h3>".$row['Titulo']."</h3>";
 	    echo $row['Contenido'];
 	  echo "</div>";
-	   echo "<div class='panel panel-footer' style='color:black';>";
+	   echo "<div class='panel panel-footer' >";
 	    echo $row['FHCreado'];
 	  echo "</div>"; 
 	echo"</div>";

@@ -122,7 +122,6 @@ $hoy = date("Y-m-d H:i:s");
 
 $queryInsert="Insert into Publicaciones (IDUser, Titulo, Contenido, img, FHCreado) VALUES (".$_SESSION['ID'].", '$Titulo','$Contenido','$imagen', '$hoy')";
 
-
 $gbd->query($queryInsert);
 
 //header("Refresh:3");

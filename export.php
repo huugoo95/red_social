@@ -1,13 +1,12 @@
 
 <?php
 
-require_once 'dompdf/autoload.inc.php';
+require_once 'assets/dompdf/autoload.inc.php';
 include_once("sql.php");
 
 session_start();
 $usu=$_SESSION['ID'];
 $nombre=$_SESSION['Nombre'];
-
 
 use Dompdf\Dompdf;
 

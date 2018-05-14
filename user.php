@@ -1,4 +1,5 @@
 <?php 
+
 	include 'cabecera.php';
  ?>
 
@@ -17,7 +18,7 @@
         <textarea class="form-control" rows="4" id="textoPublicacion" placeholder="Escribe aquí el texto que desea añadir"></textarea><br>
         <input id="imagenPublicacion" type="file" name="imagenes[]" multiple="multiple" >
 
-        </div>c
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
           <button type="button" onclick="agregarPubli();" class="btn btn-info">Agregar</button>
@@ -42,18 +43,29 @@
 */
 
 
-/*Comprobamos si tenemos qe validar un registro*/
+/*Comprobamos si tenemos que validar un registro*/
 		if (isset($_POST["Nombre"])) {
 			foreach($_POST as $nombre_campo => $valor){
 			   $asignacion = "\$" . $nombre_campo . "='" . $valor . "';";
 			   eval($asignacion);
+			   //echo "$valor";
 			}
 
 			$gbd->exec("SET CHARACTER SET utf8");
 			$gbd->exec("INSERT INTO Usuarios (Nombre,Apellidos,Pais,Email,Password) VALUES('$Nombre','$Apellidos','$Pais','$Email','$password') ");
+			$consultarId = "SELECT ID FROM Usuarios where Nombre='$Nombre' and Email='$Email' limit 1";
 			//echo "INSERT INTO Usuarios (Nombre,Apellidos,Pais,Email,Password) VALUES('$Nombre','$Apellidos','$Pais','$Email','$Password') ";
 			session_start();
  			$_SESSION["Nombre"]="$Nombre";
+ 			//$_SESSION["ID"]="$ID";
+			foreach ($gbd->query($consultarId) as $row) {
+	 			$_SESSION["ID"]=$row['ID'];
+    		} 	
+
+    		//Creamos carpeta de imagenes del usuario, donde se guardarán sus fotos subidas y de perfil
+	   		$numero_carpeta=$_SESSION["ID"];		
+			mkdir("assets/img/$numero_carpeta ",0770); 
+
 		}
 
 /*Comprobamos si tenemos qe validar un logueo*/
@@ -85,14 +97,12 @@
 		}
 
 
-
 /*Comprobamos si el usuario tiene sesión iniciada*/
  include_once("navbar.php"); 
 
-if (!isset($_SESSION["ID"])) {
-	header('Location: /');
+if (!isset($_SESSION["Nombre"])) {
+	header('Location: /index.php');
 }
-
 /*Comprobamos si accedemos al perfil propio o a otro perfil*/
 if (!isset($_GET["usu"]) || $_GET["usu"]==$_SESSION["ID"] ) {
 	$usu=$_SESSION['ID'];
@@ -109,16 +119,16 @@ if (!isset($_GET["usu"]) || $_GET["usu"]==$_SESSION["ID"] ) {
 
 echo "<div class='container'>";
 	$consultarUsu="select * from Usuarios where ID='$usu' limit 1";
-
+//echo $consultarUsu;
 	foreach ($gbd->query($consultarUsu) as $row) {
 
 	echo "<div class='row'>";
 		echo "<div class='col-md-4' id='cabeceraUser'>";
-		echo "<IMG  style='border-radius:20px' SRC='assets/img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
+		echo "<IMG  SRC='assets/img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
 		echo "</div>";
 
 		echo "<div class='col-md-6'>";
-			echo "<span style='font-size:3em;'>".$row["Nombre"]." ".$row["Apellidos"]."</span>" ;
+			echo "<h2>".$row["Nombre"]." ".$row["Apellidos"]."</h2>" ;
 			echo "<br>Nacido el ".$row['FHNacimiento']."";
 			echo "<br>".$row['Descripcion']."";
 			//echo "<br>$row['Nombre']";
@@ -159,15 +169,15 @@ $consultarPublis->execute();
 $arrayConsultarPublis=$consultarPublis->fetchAll();
 
 while($row = array_shift($arrayConsultarPublis)) {
-echo "<div class='panel panel-primary'>";
+echo "<div class='panel panel-default'>";
   echo "<div class='panel panel-heading'>";
     echo "<h3 class='panel-title'>".$row['Titulo']."</h3>";
   echo "</div>";
-  echo "<div class='panel panel-body' style='color:black';>";
-    echo "<IMG  style='border-radius:20px' SRC='img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de publicacion'>";
+  echo "<div class='panel panel-body'>";
+    echo "<IMG SRC='img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de publicacion'>";
     echo $row['Contenido'];
   echo "</div>";
-   echo "<div class='panel panel-footer' style='color:black';>";
+   echo "<div class='panel panel-footer';>";
     echo $row['FHCreado'];
   echo "</div>"; 
 echo"</div>";
@@ -190,10 +200,7 @@ echo "</div>";
 
 
 </div>
-<script src="js/java.js?w"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-
+<?php include 'pie.php'; ?>
 </body>
 </html>

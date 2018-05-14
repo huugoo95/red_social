@@ -3,21 +3,31 @@
     color: white;
   }
 
+.padre-centrado{
+  
+}
 
 .hijo-centrado {
-    position: absolute;
+   /* position: absolute;
     top: 50%;
     transform: translate(-50%, -50%);
     left: 50%;
-    width: 50%;
+    width: 50%;*/
+    /*background-color: #ffffff;
+    padding: 2px;
+    opacity: 0.9;*/
 }
 
  #myModal{
     color: black;
 
   }
-  .panel-primary{
-    border-radius:20px;
-
-  }
-  
+.panel-default{
+  color: black !important;
+}
+.panel>IMG{
+  float: left;
+}
+form>h2{
+  text-align: center;
+}
