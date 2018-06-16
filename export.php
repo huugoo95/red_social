@@ -31,7 +31,7 @@ $content.='<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstra
 $content .= '<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">';
 $content .= '<style>';
  $content .= 'body{
-    background: url("img/fondoWEB.jpg");
+    background: url("assets/css/img/fondo.jpg");
     color: white;
   }
   #myModal{

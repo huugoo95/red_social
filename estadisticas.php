@@ -1,99 +1,58 @@
 
+<?php 
+
+include_once("sql.php");
+$id_user=$_POST['id'];
 
 
-
-
-
-<div id="container" class="container">
-
-</div>
-<script src="js/java.js?w"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script src="https://code.highcharts.com/stock/highstock.js"></script>
-
-
-<script type="text/javascript">
-	
-	var seriesOptions = [],
-    seriesCounter = 0,
-    names = ['MSFT', 'AAPL', 'GOOG'];
-
-function createChart() {
-
-    Highcharts.stockChart('container', {
-
-        rangeSelector: {
-            selected: 4
-        },
-
-        title: {
-		    text: 'Visitas diarias a mi perfil'
-		},
-
-        yAxis: {
-            labels: {
-                formatter: function () {
-                    return (this.value > 0 ? ' + ' : '') + this.value + '%';
-                }
-            },
-            plotLines: [{
-                value: 0,
-                width: 2,
-                color: 'silver'
-            }]
-        },
-
-        plotOptions: {
-            series: {
-                compare: 'percent',
-                showInNavigator: true
-            }
-        },
-                tooltip: {
-            pointFormat: '<span style="color:{series.color}">{series.name}</span>: <b>{point.y}</b> ({point.change}%)<br/>',
-            valueDecimals: 2,
-            split: true
-        },
-<?php
-    include_once("sql.php");
-
-$consultarPublis = $gbd->prepare("select count(*) as cuenta from Visitas where userB='3' group by FHVisita ");
+$consultarPublis = $gbd->prepare("select count(*) as cuenta, FHVisita from Visitas where userB='$id_user' group by day(FHVisita) ");
 $consultarPublis->execute();
 $arrayConsultarPublis=$consultarPublis->fetchAll();
 
 while($row = array_shift($arrayConsultarPublis)) {
-   $data[] = $row['cuenta'];
-
-    }
-?>
-        series: [{
-         data: [<?php echo join($data, ',') ?>],
-         pointStart: 0,
-         pointInterval
-      }]
-    });
+   $fecha_ms=strtotime($row['FHVisita']." GMT")*1000;
+   $total_visitas[] = [$fecha_ms,(float)$row['cuenta']];
 }
 /*
-$.each(names, function (i, name) {
+echo "<pre>";
+echo json_encode($total_visitas);
+echo "</pre>";
+die();*/
+ ?>
 
-    $.getJSON('https://www.highcharts.com/samples/data/jsonp.php?filename=' + name.toLowerCase() + '-c.json&callback=?',    function (data) {
 
-        seriesOptions[i] = {
-            name: name,
-            data: data
-        };
+<div id="graf">
 
-        // As we're loading the data asynchronously, we don't know what order it will arrive. So
-        // we keep a counter and create the chart when all the data is loaded.
-        seriesCounter += 1;
+</div>
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+<script src="https://code.highcharts.com/stock/highstock.js"></script>
+<script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
 
-        if (seriesCounter === names.length) {
-            createChart();
-        }
-    });
-})*/
+<div id="container" style="height: 400px; min-width: 310px"></div>
+<script type="text/javascript">
+
+  // Create the chart
+  Highcharts.stockChart('container', {
+
+
+    rangeSelector: {
+      selected: 1
+    },
+
+    title: {
+      text: 'Visitas diarias a tu perfil'
+    },
+
+    series: [{
+      name: 'visitas',
+      data: <?php echo json_encode($total_visitas); ?>,
+      tooltip: {
+        valueDecimals: 2
+      }
+    }]
+  });
+
+
+
 </script>
-
-</body>
-</html>

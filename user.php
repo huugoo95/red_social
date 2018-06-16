@@ -2,8 +2,7 @@
 
 	include 'cabecera.php';
  ?>
-
-  <!-- Modal -->
+  <!-- Modal  para agregar publicaciones -->
   <div class="modal fade" id="myModal" role="dialog">
     <div class="modal-dialog">
     	
@@ -13,11 +12,12 @@
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title" >Crear una nueva publicación</h4>
         </div>
+        <form enctype="multipart/form-data" action="" id="formulario_publicacion">
         <div class="modal-body" id="modalBody">
-        <input type="text" class="form-control" id="tituloPublicacion" placeholder="Título de publicacion" name="titulo"><br>
-        <textarea class="form-control" rows="4" id="textoPublicacion" placeholder="Escribe aquí el texto que desea añadir"></textarea><br>
-        <input id="imagenPublicacion" type="file" name="imagenes[]" multiple="multiple" >
-
+        <input type="text" class="form-control" id="tituloPublicacion" name="titulo" placeholder="Título de publicacion"><br>
+        <textarea class="form-control" rows="4" id="textoPublicacion" name="texto" placeholder="Escribe aquí el texto que desea añadir"></textarea><br>
+        <input id="imagenPublicacion" type="file" name="imagenPublicacion">
+        </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -63,8 +63,11 @@
     		} 	
 
     		//Creamos carpeta de imagenes del usuario, donde se guardarán sus fotos subidas y de perfil
-	   		$numero_carpeta=$_SESSION["ID"];		
-			mkdir("assets/img/$numero_carpeta ",0770); 
+	   		$numero_carpeta=$_SESSION["ID"];
+	   		$antigua = umask(0);
+			mkdir("assets/img/$numero_carpeta",0770,true); 
+			umask($antigua);
+			copy("assets/img/homer.jpg","assets/img/".$numero_carpeta."/perfil.jpeg");
 
 		}
 
@@ -162,29 +165,29 @@ echo "</div><br>";
 
 
 echo "<div id='contenidoInferior'>";
-/*Consultamos publicaciones de usuario*/
+	/*Consultamos publicaciones de usuario*/
 
-$consultarPublis = $gbd->prepare("select * from Publicaciones where IDUser='$usu' order by FHCreado desc ");
-$consultarPublis->execute();
-$arrayConsultarPublis=$consultarPublis->fetchAll();
+	$consultarPublis = $gbd->prepare("select * from Publicaciones where IDUser='$usu' order by FHCreado desc ");
+	$consultarPublis->execute();
+	$arrayConsultarPublis=$consultarPublis->fetchAll();
 
-while($row = array_shift($arrayConsultarPublis)) {
-echo "<div class='panel panel-default'>";
-  echo "<div class='panel panel-heading'>";
-    echo "<h3 class='panel-title'>".$row['Titulo']."</h3>";
-  echo "</div>";
-  echo "<div class='panel panel-body'>";
-    echo "<IMG SRC='img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de publicacion'>";
-    echo $row['Contenido'];
-  echo "</div>";
-   echo "<div class='panel panel-footer';>";
-    echo $row['FHCreado'];
-  echo "</div>"; 
-echo"</div>";
+	while($row = array_shift($arrayConsultarPublis)) {
+	echo "<div class='panel panel-default'>";
+	  echo "<div class='panel panel-heading'>";
+	    echo "<h3 class='panel-title'>".$row['Titulo']."</h3>";
+	  echo "</div>";
+	  echo "<div class='panel panel-body'>";
+	    echo "<IMG SRC='assets/img/publicaciones/".$row['IDPubli']."/".$row['img']."' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de publicacion'>";
+	    echo $row['Contenido'];
+	  echo "</div>";
+	   echo "<div class='panel panel-footer';>";
+	    echo $row['FHCreado'];
+	  echo "</div>"; 
+	echo"</div>";
 
 
-	//echo $row["Titulo"];
-}
+		//echo $row["Titulo"];
+	}
 echo "<div>";
 
 
@@ -200,7 +203,4 @@ echo "</div>";
 
 
 </div>
-
 <?php include 'pie.php'; ?>
-</body>
-</html>
