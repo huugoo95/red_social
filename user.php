@@ -1,5 +1,14 @@
 <?php 
 
+/*Se puede llegar a este dichero de 4 formas
+
+	*Desde el formulario de registro
+	*Desde el formulario de login
+	*Desde la barra de navegacion "Mi perfil"
+	*Accediendo al perfil de otro usuario
+
+*/
+
 	include 'cabecera.php';
  ?>
   <!-- Modal  para agregar publicaciones -->
@@ -20,27 +29,44 @@
         </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
           <button type="button" onclick="agregarPubli();" class="btn btn-info">Agregar</button>
         </div>
       </div>
       
     </div>
   </div>
-  
+
+  <!-- Modal  para editar información de perfil -->
+  <div class="modal fade" id="modalEditarPerfil" role="dialog">
+    <div class="modal-dialog">
+    	
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title" >Editar información de perfil</h4>
+        </div>
+        <form enctype="multipart/form-data" action="" id="formulario_perfil">
+        <div class="modal-body" id="modalBody">
+        <input type="text" class="form-control" id="nombreUsuario" name="nombreUsuario" placeholder="Nombre de usuario"><br>
+        <textarea class="form-control" rows="4" id="descripcionUsuario" name="descripcionUsuario" placeholder="Escribe aquí tu descripción"></textarea><br>
+        <input id="imagenPerfil" type="file" name="imagenPerfil">
+        </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+          <button type="button" onclick="modificarPerfil();" class="btn btn-info">Agregar</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+    
 <?php 
 
 /*Incluimos fichero de conexión sql*/
 	include_once("sql.php");
-
-/*Se puede llegar a este dichero de 4 formas
-
-	*Desde el formulario de registro
-	*Desde el formulario de login
-	*Desde la barra de navegacion "Mi perfil"
-	*Accediendo al perfil de otro usuario
-
-*/
 
 
 /*Comprobamos si tenemos que validar un registro*/
@@ -73,38 +99,38 @@
 
 /*Comprobamos si tenemos qe validar un logueo*/
 
-		if (isset($_POST["logueo"])) {
-
-			foreach($_POST as $nombre_campo => $valor){
-			    $asignacion = "\$" . $nombre_campo . "='" . $valor . "';";
-		   		eval($asignacion);
-
-			}
-			$gbd->exec("SET CHARACTER SET utf8");
-			$consultarUser="select * from Usuarios where Email='$Mail' and Password='$passwordLogin' limit 1";
-
-			/*$cuenta = $gbd->rowCount($consultarUser);
-			echo $cuenta."12345";
-			if ($cuenta==0) {
-				header('Location: index.php?error');
-			}*/
-
-			foreach ($gbd->query($consultarUser) as $row) {
-			session_start();
-	        	$_SESSION["Nombre"]=$row['Nombre'];
-	 			$_SESSION["ID"]=$row['ID'];
-    		}
-
-
+	if (isset($_POST["logueo"])) {
+		foreach($_POST as $nombre_campo => $valor){
+		    $asignacion = "\$" . $nombre_campo . "='" . $valor . "';";
+	   		eval($asignacion);
 
 		}
+		$gbd->exec("SET CHARACTER SET utf8");
+		$consultarUser="select * from Usuarios where Email='$Mail' and Password='$passwordLogin' limit 1";
+
+		/*$cuenta = $gbd->rowCount($consultarUser);
+		echo $cuenta."12345";
+		if ($cuenta==0) {
+			header('Location: index.php?error');
+		}*/
+
+		foreach ($gbd->query($consultarUser) as $row) {
+		session_start();
+        	$_SESSION["Nombre"]=$row['Nombre'];
+ 			$_SESSION["ID"]=$row['ID'];
+		}
+
+		//Redireccionamos para librarnos de posteriores reenvios de formularios
+		header('Location: user.php');
+
+	}
 
 
 /*Comprobamos si el usuario tiene sesión iniciada*/
  include_once("navbar.php"); 
 
 if (!isset($_SESSION["Nombre"])) {
-	header('Location: /index.php');
+	header('Location: index.php');
 }
 /*Comprobamos si accedemos al perfil propio o a otro perfil*/
 if (!isset($_GET["usu"]) || $_GET["usu"]==$_SESSION["ID"] ) {
@@ -126,22 +152,27 @@ echo "<div class='container'>";
 	foreach ($gbd->query($consultarUsu) as $row) {
 
 	echo "<div class='row'>";
-		echo "<div class='col-md-4' id='cabeceraUser'>";
+		echo "<div class='col-md-4' col-xs-12 id='cabeceraUser'>";
 		echo "<IMG  SRC='assets/img/$usu/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
 		echo "</div>";
 
-		echo "<div class='col-md-6'>";
+		echo "<div class='col-md-6' col-xs-12>";
 			echo "<h2>".$row["Nombre"]." ".$row["Apellidos"]."</h2>" ;
 			echo "<br>Nacido el ".$row['FHNacimiento']."";
 			echo "<br>".$row['Descripcion']."";
 			//echo "<br>$row['Nombre']";
 		echo "</div>";
-		echo "<div class='col-md-2'>";
+		echo "<div class='col-md-2 col-xs-12'>";
 		if ($yo==true) {
-			echo "<button data-toggle='modal' data-target='#myModal' class='btn btn-default'><i class='fa fa-pencil-square-o'  aria-hidden='true'></i> Escribir publicacion</button>" ;
+			echo "
+				<button data-toggle='modal' data-target='#myModal' class='btn btn-default col-xs-12'><i class='fa fa-pencil-square-o'  aria-hidden='true'></i> Escribir publicacion</button>" ;
 			//echo "<button class='btn btn-default'><i class='fa fa-user-circle-o' aria-hidden='true'></i> Editar perfil</button>" ;
-			echo "<button class='btn btn-default' onclick='verEstadisticas(".$_SESSION['ID'].");'><i class='fa fa-line-chart' aria-hidden='true'></i> Ver estadísticas</button>" ;
-			echo "<a href='export.php?pdf=1' <button class='btn btn-default' ><i class='fa fa-file-pdf-o' aria-hidden='true'></i> Exportar publicaciones</button></a>" ;
+			echo "
+				<button class='btn btn-default col-xs-12' onclick='verEstadisticas(".$_SESSION['ID'].");'><i class='fa fa-line-chart' aria-hidden='true'></i> Ver estadísticas</button>" ;
+			echo "
+				<button data-toggle='modal' data-target='#modalEditarPerfil' class='btn btn-default col-xs-12'><i class='fa fa-pencil-square-o'  aria-hidden='true'></i> Editar perfil</button>" ;
+			
+			//echo "<a href='export.php?pdf=1' <button class='btn btn-default' ><i class='fa fa-file-pdf-o' aria-hidden='true'></i> Exportar publicaciones</button></a>" ;
 		}else{
 			$consultarSegQuery="select * from Amigos where seguidor='".$_SESSION['ID']."' and seguido='$usu' limit 1";
 			//echo $consultarSegQuery;
@@ -178,7 +209,7 @@ echo "<div id='contenidoInferior'>";
 	  echo "</div>";
 	  echo "<div class='panel panel-body'>";
 	    echo "<IMG SRC='assets/img/publicaciones/".$row['IDPubli']."/".$row['img']."' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de publicacion'>";
-	    echo $row['Contenido'];
+	    echo nl2br($row['Contenido']);
 	  echo "</div>";
 	   echo "<div class='panel panel-footer';>";
 	    echo $row['FHCreado'];

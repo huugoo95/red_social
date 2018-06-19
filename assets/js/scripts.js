@@ -13,7 +13,7 @@ function agregarPubli() {
 			processData: false,
 			contentType: false,			
 			beforeSend: function () {
-				$("#modalBody").html(" <img src=\"img/carga.gif\" /> Cargando ");
+				$("#modalBody").html(" <img src=\"assets/img/carga.gif\" /> Cargando ");
 			},
 			success:function (response) {
 				$("#modalBody").html(response);location.reload(); 
@@ -30,7 +30,7 @@ function modificarSeg(accion,seguidor,seguido) {
 			url: 'modificarSeg.php', 
 			type: 'POST', 
 			beforeSend: function () {
-				$("#cabeceraUser").html(" <img src=\"img/carga.gif\" /> Cargando ");
+				$("#cabeceraUser").html(" <img src=\"assets/img/carga.gif\" /> Cargando ");
 			},
 			//success:function (response) {alert("Vale cabrón!");}});	
 			success:function (response) {location.reload();}});	
@@ -45,7 +45,7 @@ function verEstadisticas(id) {
 			url: 'estadisticas.php', 
 			type: 'POST', 
 			beforeSend: function () {
-				$("#contenidoInferior").html(" <img src=\"img/carga.gif\" /> Cargando ");
+				$("#contenidoInferior").html(" <img src=\"assets/img/carga.gif\" /> Cargando ");
 			},
 			//success:function (response) {alert("Vale mozo!");}});	
 			success:function (response) {$("#contenidoInferior").html(response);}});	

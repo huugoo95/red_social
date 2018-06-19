@@ -1,8 +1,8 @@
 <?php
 
 $dsn = 'mysql:dbname=RedSocial;host=localhost;charset=UTF8';
-$usuario = 'pi';
-$contraseña = 'abcd1234.';
+$usuario = 'hugo';
+$contraseña = 'abcd1234.PI';
 
 /*
 $mysqli = new mysqli("localhost", "pi", "abcd1234.", "RedSocial");

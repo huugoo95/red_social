@@ -26,7 +26,7 @@ if ($_GET["logout"]=="si") {
   session_start();
 
 //En caso de tener sesión iniciada se redirigirá a la página del usuario
-if (isset($_SESSION['Nombre'])) {
+if (isset($_SESSION['Nombre']) && $_GET["logout"]!="si") {
     header('Location: user.php');
 }  
 
