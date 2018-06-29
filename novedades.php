@@ -37,7 +37,7 @@ while($row = array_shift($arrayConsultarPublis)) {
 
 	  echo "</div>";
 	  echo "<div class='panel panel-body' style='color:black';>";
-	    echo "<IMG SRC='img/".$_SESSION['ID']."/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
+	    echo "<IMG SRC='assets/img/".$arrayConsultarUsuario[0]['ID']."/perfil.jpeg' WIDTH=250 HEIGHT=220 BORDER=2 VSPACE=3 HSPACE=3 ALT='Foto de perfil'>";
 	   	echo "<h3>".$row['Titulo']."</h3>";
 	    echo $row['Contenido'];
 	  echo "</div>";
